@@ -70,7 +70,7 @@ class RunningMeanStd(object):
         self.dict['var'] += (delta**2-self.dict['var'])/self.dict['count']
     
 class CMAConv2d(nn.Module):
-    def __init__(self, in_features, out_features, kernel_size=5, stride=1, padding=2, bias=True, std_init=None, lr=1e-2, denom=200.0, maxlen=10):
+    def __init__(self, in_features, out_features, kernel_size=5, stride=1, padding=2, bias=True, lr=1e-2, denom=200.0, maxlen=10):
         super(CMAConv2d, self).__init__()
         self.in_features = in_features
         self.out_features = out_features
