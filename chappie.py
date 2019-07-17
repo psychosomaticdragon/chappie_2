@@ -135,7 +135,6 @@ class CMAConv2d(nn.Module):
             diff = target.param.data-(self.param.data+self.param_epsilon.data)
             target.param_covar.data.add_(ratio*0.05, diff.view(1,-1)*diff.view(-1,1)-target.param_covar.data)
             target.param.data.add_(ratio*0.05, self.param.data+self.param_epsilon.data-target.param.data)
-            print(target.param_covar.max(), target.param_covar.min())
         target.update_count[thread].add_(1).clamp_(0,target.denom)
         
         return restart
@@ -195,7 +194,6 @@ class acNet(nn.Module):
     def sample_noise(self):
         self.conv1.resample()
         self.fc4.resample()
-        self.resample_mask()
         self.hidden = None
         
     def CMA_update(self, score, target, thread):
@@ -293,10 +291,9 @@ torch.set_flush_denormal(True)
 if __name__ == '__main__':
     n = 9
     lock = mp.Lock()
-    net = acNet(n))
-    net.reset_parameters()
+    net = acNet(n)
     net.share_memory()
-    workers = [train_window(net,lock,sticky=i) for i in range(6)]
+    workers = [train_window(net,lock,sticky=i) for i in range(1)]
     [w.start() for w in workers]
     [w.join() for w in workers]
     
